@@ -1,0 +1,444 @@
+{% extends 'admin/master.html' %} {% block body %} {{ super() }} {% if
+current_user.is_authenticated %}
+
+<!-- Content Header (Page header) -->
+<section class="content-header">
+  <h1>
+    School
+  </h1>
+  <ol class="breadcrumb">
+    <li>
+      <a href="#"><i class="fa fa-dashboard"></i> Home</a>
+    </li>
+    <li class="active">Custom</li>
+  </ol>
+</section>
+
+<section class="content">
+  <div class="row">
+    <!-- Left col -->
+    <section class="container">
+      <ul class="nav nav-tabs">
+        <li class="active"><a data-toggle="tab" href="#home">School</a></li>
+        <li><a data-toggle="tab" href="#input">Input</a></li>
+        <li><a data-toggle="tab" href="#menu2">Menu 2</a></li>
+      </ul>
+
+      <div class="tab-content">
+        <div id="home" class="tab-pane fade in active">
+          <br />
+          <button
+            type="button"
+            name="btn"
+            value="Submit"
+            id="submitBtn"
+            data-toggle="modal"
+            data-target="#edit-submit"
+            class="btn btn-default"
+          >
+            Add
+          </button>
+          <table
+            id="school_table"
+            class="table table-striped table-bordered table-sm"
+          >
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col" class="text-center">#</th>
+                <th scope="col" class="text-center">Name En</th>
+                <th scope="col" class="text-center">Name Kh</th>
+                <th scope="col" class="no-sort text-center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for x in _list %}
+              <tr>
+                <th scope="row" class="text-center">{{x.row}}</th>
+                <th class="text-center">{{x.name_en}}</th>
+                <th class="text-center">{{x.name_kh}}</th>
+                <th class="text-center">
+                  <button
+                    type="button"
+                    name="btn"
+                    value="Submit"
+                    id="submitBtn"
+                    data-toggle="modal"
+                    data-target="#edit-submit"
+                    class="btn btn-default"
+                  >
+                    <i class="fa fa-edit"></i>
+                  </button>
+                  <button type="button" class="btn btn-danger">
+                    <i class="fa fa-trash"></i>
+                  </button>
+                </th>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <div
+            class="modal fade"
+            id="edit-submit"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  Edit
+                </div>
+                <br />
+                <form
+                  id="formfield"
+                  class="form-horizontal"
+                  action="/admin/school"
+                  method="post"
+                >
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Name En</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="name_en"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Name Kh</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="name_kh"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name Kh"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Image</label>
+                    <div class="col-sm-10">
+                      <div id="ImageGroup">
+                        <div id="ImageDiv1">
+                          <input
+                            name="image1"
+                            type="text"
+                            class="form-control"
+                            placeholder="Image"
+                          />
+                        </div>
+                      </div>
+                      <input
+                        class="btn btn-primary"
+                        type="button"
+                        value="Add Image"
+                        id="image_add"
+                      />
+                      <input
+                        class="btn btn-danger"
+                        type="button"
+                        value="Remove Image"
+                        id="image_remove"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Pop Major En</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="pop_major_en"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Pop Major Kh</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="pop_major_kh"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Price Low</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="price_low"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Price High</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="price_high"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Type</label>
+                    <div class="col-sm-10">
+                      <select name="type" class="form-control">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                      </select>
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Bio En</label>
+                    <div class="col-sm-10">
+                      <textarea
+                        name="bio_en"
+                        type="text"
+                        class="form-control"
+                        placeholder="Bio En"
+                        rows="5"
+                      ></textarea>
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Bio Kh</label>
+                    <div class="col-sm-10">
+                      <textarea
+                        name="bio_kh"
+                        type="text"
+                        class="form-control"
+                        placeholder="Bio Kh"
+                        rows="5"
+                      ></textarea>
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label"
+                      >Stand Out Point</label
+                    >
+                    <div class="col-sm-10">
+                      <div id="StandOutPointGroup">
+                        <div id="StandOutPointDiv1">
+                          <input
+                            name="stand_point_en1"
+                            type="text"
+                            class="form-control"
+                            placeholder="Stand Out Point En"
+                          />
+                          <input
+                            name="stand_point_kh1"
+                            type="text"
+                            class="form-control"
+                            placeholder="Stand Out Point kh"
+                          />
+                        </div>
+                      </div>
+                      <input
+                        class="btn btn-primary"
+                        type="button"
+                        value="Add"
+                        id="sop_add"
+                      />
+                      <input
+                        class="btn btn-danger"
+                        type="button"
+                        value="Remove"
+                        id="sop_remove"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Mission En</label>
+                    <div class="col-sm-10">
+                      <textarea
+                        name="mission_en"
+                        class="form-control rounded-0"
+                        placeholder="Mission En"
+                        rows="5"
+                      ></textarea>
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Mission Kh</label>
+                    <div class="col-sm-10">
+                      <textarea
+                        name="mission_kh"
+                        class="form-control rounded-0"
+                        placeholder="Mission Kh"
+                        rows="5"
+                      ></textarea>
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Website</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="website"
+                        type="text"
+                        class="form-control"
+                        placeholder="Website"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Tel</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="tel"
+                        type="text"
+                        class="form-control"
+                        placeholder="Name En"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="col-sm-2 control-label">Email</label>
+                    <div class="col-sm-10">
+                      <input
+                        name="email"
+                        type="text"
+                        class="form-control"
+                        placeholder="Email"
+                      />
+                      <p>*Example: Kirirom Institude of Technology</p>
+                    </div>
+                  </div>
+                </form>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <input
+                    id="submit"
+                    type="submit"
+                    value="Submit"
+                    class="btn btn-success success"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="input" class="tab-pane fade">
+          <h1>Input</h1>
+          <form action="/admin/school" method="POST">
+            <input type="text" name="firstname" />
+            <input type="submit" />
+          </form>
+        </div>
+        <div id="menu2" class="tab-pane fade">
+          <h3>Menu 2</h3>
+          <p>Some content in menu 2.</p>
+        </div>
+      </div>
+    </section>
+    <!-- /.Left col -->
+  </div>
+  <!-- /.row (main row) -->
+</section>
+<!-- /.content -->
+
+<script
+  src="{{url_for('static',filename='js/jquery-3.3.1.min.js')}}"
+  type="text/javascript"
+></script>
+<script
+  src="{{url_for('static',filename='js/jquery.dataTables.min.js')}}"
+  type="text/javascript"
+></script>
+<script
+  src="{{url_for('static',filename='js/dataTables.jqueryui.min.js')}}"
+  type="text/javascript"
+></script>
+<script
+  src="{{url_for('static',filename='js/dataTables.bootstrap.min.js')}}"
+  type="text/javascript"
+></script>
+
+<script
+  src="{{url_for('static',filename='js/pages/school.js')}}"
+  type="text/javascript"
+></script>
+{% else %}
+
+<center>
+  <section class="content" style="color: white">
+    <div class="col-sm-12">
+      <h1>Flask-Admin example</h1>
+      <p class="lead">
+        Authentication
+      </p>
+      <p>
+        This example shows how you can use Flask-Admin in an admin template,
+        <br />
+        here I used AdminLTE and
+        <a
+          href="https://pythonhosted.org/Flask-Security/index.html"
+          target="_blank"
+          >Flask-Security</a
+        >
+        for authentication.
+      </p>
+      {% if not current_user.is_authenticated %}
+      <p>
+        You can register as a regular user, or log in as a superuser with the
+        following credentials: <br /><br />
+
+        email: <b>admin</b> <br />
+        password: <b>admin</b> <br />
+        <br />
+      </p>
+
+      <p>
+        <a class="btn btn-primary" href="{{ url_for('security.login') }}"
+          >Login</a
+        >
+        <a class="btn btn-default" href="{{ url_for('security.register') }}"
+          >Register</a
+        >
+      </p>
+      {% endif %}
+      <br />
+      <p>
+        <a class="btn btn-primary" href="/"
+          ><i class="glyphicon glyphicon-chevron-left"></i> Back</a
+        >
+      </p>
+    </div>
+  </section>
+</center>
+
+<br /><br /><br /><br /><br /><br /><br /><br /><br />
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+{% endif %} {% endblock body %}
