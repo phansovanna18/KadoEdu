@@ -1,3 +1,8 @@
+// $("#submit").click(function() {
+//   $("#form_insert_subject").submit();
+// });
+
+
 $("#school_table").DataTable({
   ordering: true,
   columnDefs: [

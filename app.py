@@ -2,7 +2,7 @@ from Module import *
 
 
 # Setup Flask-Security
-user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+user_datastore = SQLAlchemyUserDatastore(db, UserAdmin, Role)
 security = Security(app, user_datastore)
 
 # Flask views
@@ -27,13 +27,13 @@ from View import *
 # Add model views
 
 admin.add_view(SchoolView(name="School", endpoint='school', menu_icon_type='fa', menu_icon_value='fa-connectdevelop'))
-admin.add_view(SchoolPriceView(name="School Price", endpoint='schoolprice', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
-admin.add_view(BacIIContentView(name="Bac II Content", endpoint='bacii', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
-admin.add_view(UserClientView(UserClient, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="User Client"))
-admin.add_view(MyModelView(Role, db.session, menu_icon_type='fa', menu_icon_value='fa-server', name="Roles"))
-admin.add_view(UserView(User, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="Users"))
+# admin.add_view(SchoolPriceView(name="School Price", endpoint='schoolprice', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
+# admin.add_view(BacIIContentView(name="Bac II Content", endpoint='bacii', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
 admin.add_view(CustomView(name="Custom view", endpoint='custom', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
-
+# admin.add_view(UserClientView(UserClient, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="User Client"))
+admin.add_view(MyModelView(Role, db.session, menu_icon_type='fa', menu_icon_value='fa-server', name="Roles"))
+admin.add_view(UserView(UserAdmin, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="Users"))
+admin.add_view(BacII_Post_View(name="BacII", endpoint="bacii", menu_icon_type='fa', menu_icon_value='fa-users'))
 
 # define a context processor for merging flask-admin's template context into the
 # flask-security views.
@@ -66,9 +66,9 @@ def build_sample_db():
         db.session.commit()
 
         test_user = user_datastore.create_user(
-            first_name='Admin',
+            first_name='AdminKado',
             email='admin',
-            password=encrypt_password('admin'),
+            password=encrypt_password('adminkado'),
             roles=[user_role, super_user_role]
         )
         db.session.commit()
@@ -76,6 +76,5 @@ def build_sample_db():
 
 if __name__ == '__main__':
     # build_sample_db()
-
     # Start app
-    app.run(debug=False)
+    app.run(debug=True)
