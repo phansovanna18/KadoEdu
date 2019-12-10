@@ -85,21 +85,10 @@ current_user.is_authenticated %}
         </div>
         <div id="subject" class="tab-pane fade row">
           <br />
-          <button
-            type="button"
-            name="btn"
-            value="Submit"
-            id="submitBtn"
-            data-toggle="modal"
-            data-target="#add_subject"
-            class="btn btn-default"
-          >
+          <button type="button" name="btn" value="Submit" id="submitBtn" data-toggle="modal" data-target="#add_subject" class="btn btn-default">
             Add Subject
           </button>
-          <table
-            id="school_table"
-            class="table table-striped table-bordered table-sm"
-          >
+          <table id="school_table" class="table table-striped table-bordered table-sm">
             <thead class="thead-dark">
               <tr>
                 <th scope="col" class="text-center">#</th>
@@ -115,15 +104,7 @@ current_user.is_authenticated %}
                 <th class="text-center">{{x.name_en}}</th>
                 <th class="text-center">{{x.name_kh}}</th>
                 <th class="text-center">
-                  <button
-                    type="button"
-                    name="btn"
-                    value="Submit"
-                    id="submitBtn"
-                    data-toggle="modal"
-                    data-target="#confirm-submit"
-                    class="btn btn-default"
-                  >
+                  <button type="button" name="btn" value="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-default">
                     <i class="fa fa-edit"></i>
                   </button>
                   <button type="button" class="btn btn-danger">
@@ -142,6 +123,7 @@ current_user.is_authenticated %}
               <form id="form_insert_subject" class="form-horizontal" action="/admin/bacii/" method="POST">
                 <br />
                 <div class="form-group">
+                  <input name="form_method" value="save_subject_bacii" hidden/>
                   <label class="col-sm-2 control-label">Subject Name En</label>
                   <div class="col-sm-9">
                     <input id="input_subject_name_en" type="text" name="subject_name_en" class="form-control" placeholder="Name En"/>
@@ -163,14 +145,7 @@ current_user.is_authenticated %}
             </div>
           </div>
         </div>
-        <div
-          class="modal fade"
-          id="confirm-submit"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="myModalLabel"
-          aria-hidden="true"
-        >
+        <div class="modal fade" id="confirm-submit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -181,22 +156,14 @@ current_user.is_authenticated %}
                 <div class="form-group">
                   <label class="col-sm-2 control-label">Name En</label>
                   <div class="col-sm-9">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Name En"
-                    />
+                    <input type="text" class="form-control" placeholder="Name En"/>
                     <p>*Example: Physical</p>
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-sm-2 control-label">Name Kh</label>
                   <div class="col-sm-9">
-                    <input
-                      type="text"
-                      class="form-control"
-                      placeholder="Name Kh"
-                    />
+                    <input type="text" class="form-control" placeholder="Name Kh" />
                     <p>*Example: រូបវិទ្យា</p>
                   </div>
                 </div>

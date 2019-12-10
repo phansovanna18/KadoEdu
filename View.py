@@ -3,6 +3,17 @@ from flask_admin import BaseView, expose
 from flask_admin.contrib import sqla
 from flask import request, abort
 from Module import *
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import InvalidRequestError
+import random
+import psycopg2
+
+def uniqueID(len):
+    letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    uniqueCode = ""
+    for x in range(0,len):
+        uniqueCode += letter[random.randrange(0,35)] 
+    return uniqueCode
 
 
 # Create customized model view class
@@ -82,24 +93,32 @@ class BacII_Post_View(BaseView):
     @expose('/', methods=['POST','GET'])
     def index(self):
         if request.method == "POST":
-
-            print("=============================")
-            print(request.form.to_dict())
-            print("=============================")
             data = request.form.to_dict()
-            subject_name_en = data['subject_name_en']
-            subject_name_kh = data['subject_name_kh']
-            obj = db.session.query(SubjectBacII).order_by(SubjectBacII.id.desc()).first()
+            if data['form_method'] == "save_subject_bacii":
+                try:
+                    subject_name_en = data['subject_name_en']
+                    subject_name_kh = data['subject_name_kh']
+                    id_code = uniqueID(6)
+                    subject = SubjectBacII(id=id_code, name_en = subject_name_en, name_kh = subject_name_kh)
+                    db.session.add(subject)
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+                    self.index()
+                except InvalidRequestError:
+                    db.session.rollback()       
+                    self.index()
+                except psycopg2.errors.UniqueViolation:
+                    db.session.rollback()
+                    self.index()
             
-            print("==================")
-            print(obj.id)
-            print("==================")
-            # subject = SubjectBacII(id="subject1",name_en = subject_name_en, name_kh = subject_name_kh)
-            # db.session.add(subject)
-            # db.session.commit()
-        _list = list()
+
+        list_subject = list()
         subject = list()
+        _object = SubjectBacII.query.all()
+        print(_object)
+        for i in _object:
+            list_subject.append({'row':i.id,'name_en':i.name_en,'name_kh':i.name_kh})
         for i in range(1,110):
             subject.append(i)
-            _list.append({'row':i,'name_en':'English'+str(i),'name_kh':'Khmer'+str(i)})
-        return self.render('admin/bacii.html', _list = _list, subject = subject)
+        return self.render('admin/bacii.html', _list = list_subject, subject = subject)
