@@ -3,6 +3,8 @@
 // });
 
 
+
+
 $("#school_table").DataTable({
   ordering: true,
   columnDefs: [

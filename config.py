@@ -3,10 +3,10 @@ SECRET_KEY = '123456790'
 
 # Create in-memory database
 DBUSER = 'postgres'
-DBPASS = '12345678'
+DBPASS = 'rebelliondante'
 DBHOST = 'localhost'
 DBPORT = '5432'
-DBNAME = 'test8'
+DBNAME = 'kadoTestDB'
 
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
         user=DBUSER,
