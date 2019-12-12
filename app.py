@@ -11,6 +11,11 @@ def index():
     return render_template('index.html')
 
 
+@app.route('/api/getpost')
+def getpost():
+    query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(2)
+    query = query[::-1]
+    return str(query)
 
 
 # Create admin

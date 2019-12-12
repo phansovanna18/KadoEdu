@@ -111,8 +111,23 @@ class BacII_Post_View(BaseView):
                 except psycopg2.errors.UniqueViolation:
                     db.session.rollback()
                     self.index()
-            
-
+            if data['form_method'] == "post_bacii":
+                try:
+                    subject_name_en = data['subject_name_en']
+                    subject_name_kh = data['subject_name_kh']
+                    id_code = uniqueID(6)
+                    subject = SubjectBacII(id=id_code, name_en = subject_name_en, name_kh = subject_name_kh)
+                    db.session.add(subject)
+                    db.session.commit()
+                except IntegrityError:
+                    db.session.rollback()
+                    self.index()
+                except InvalidRequestError:
+                    db.session.rollback()       
+                    self.index()
+                except psycopg2.errors.UniqueViolation:
+                    db.session.rollback()
+                    self.index()
         list_subject = list()
         subject = list()
         _object = SubjectBacII.query.all()
