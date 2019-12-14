@@ -2,10 +2,10 @@
 import os
 from flask import Flask, url_for, redirect, render_template, request, abort
 from flask_sqlalchemy import SQLAlchemy
-from flask_security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+from flask_security import Security, SQLAlchemyUserDatastore, UserMixin, RoleMixin, login_required
 from flask_security.utils import encrypt_password
 import flask_admin
+
 
 from flask_admin import helpers as admin_helpers
 
