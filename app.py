@@ -15,7 +15,19 @@ def index():
 def getpost():
     query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(5)
     query = query[::-1]
-    return str(query)
+    _list = list()
+    if query != None:
+        for x in query:
+            subject = db.session.query(SubjectBacII).filter_by(id = x.subjectBacII).first()
+            subject_en = None
+            subject_kh = None
+            if subject != None:
+                subject_en = subject.name_en
+                subject_kh = subject.name_kh
+            owner = db.session.query(User).filter_by(id = x.owner).first()
+            _list.append({'id':x.id, 'datetime':x.datetime, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':x.owner})
+        return jsonify({"result":_list, "state":1})
+    return jsonify({"state":0})
 
 
 # Create admin
@@ -37,9 +49,9 @@ admin.add_view(SchoolView(name="School", endpoint='school', menu_icon_type='fa',
 admin.add_view(CustomView(name="Custom view", endpoint='custom', menu_icon_type='fa', menu_icon_value='fa-connectdevelop',))
 # admin.add_view(UserClientView(UserClient, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="User Client"))
 admin.add_view(MyModelView(Role, db.session, menu_icon_type='fa', menu_icon_value='fa-server', name="Roles"))
-admin.add_view(UserView(UserAdmin, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="Users"))
+admin.add_view(UserAdminView(UserAdmin, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="UserAdmin"))
 admin.add_view(BacII_Post_View(name="BacII", endpoint="bacii", menu_icon_type='fa', menu_icon_value='fa-users'))
-
+admin.add_view(UserView(User, db.session, menu_icon_type='fa', menu_icon_value='fa-users', name="Users"))
 # define a context processor for merging flask-admin's template context into the
 # flask-security views.
 @security.context_processor
@@ -79,7 +91,20 @@ def build_sample_db():
         db.session.commit()
     return
 
+
+#data sample
+def build_sample_User_db():
+    import string
+    import random
+    # with app.app_context():
+    test_user = User(id = "JDEDIXA3", displayName = "Admin",profileUrl = "https://avatars1.githubusercontent.com/u/45761736?s=400&u=0d5c4f046fdc2bc8682cb99d9d4d611eda87010c&v=4", total_post = 0, total_like = 0, joindate = datetime.datetime.now())
+    db.session.add(test_user)
+    db.session.commit()
+    return
+
+
 if __name__ == '__main__':
     # build_sample_db()
     # Start app
+    # build_sample_User_db()
     app.run(debug=True)

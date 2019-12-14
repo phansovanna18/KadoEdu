@@ -4,15 +4,15 @@ var Name_KH = ""
 var Classid = ""
 
 function passData(en, kh, id){
-  Name_EN = en
-  Name_KH = kh
-  Classid = id
-  getData()
+	Name_EN = en
+	Name_KH = kh
+  	Classid = id
+  	getData()
 }
 
 function getData(){
-  document.getElementById("edit_En").value = Name_EN
-  document.getElementById("edit_Kh").value = Name_KH
+  	document.getElementById("edit_En").value = Name_EN
+  	document.getElementById("edit_Kh").value = Name_KH
 }
 </script>
 {% extends 'admin/master.html' %} {% block body %} {{ super() }} {% if
@@ -20,15 +20,15 @@ current_user.is_authenticated %}
 
 <!-- Content Header (Page header) -->
 <section class="content-header affix">
-  <h1>
-    Bac II Content
-  </h1>
-  <ol class="breadcrumb">
-    <li>
-      <a href="/admin/"><i class="fa fa-dashboard"></i> Home</a>
-    </li>
-    <li class="active">Custom</li>
-  </ol>
+	<h1>
+    	Bac II Content
+  	</h1>
+  	<ol class="breadcrumb">
+    	<li>
+      		<a href="/admin/"><i class="fa fa-dashboard"></i> Home</a>
+    	</li>
+    	<li class="active">Custom</li>
+  	</ol>
 </section>
 
 <section class="content">
@@ -65,32 +65,42 @@ current_user.is_authenticated %}
           </div>
         </div>
         <div id="post" class="tab-pane fade">
-          <form class="form-horizontal">
-            <div class="form-group">
+		  <form class="form-horizontal" action="/admin/bacii/" method="POST">
+			<input name="owner" value={{current_user.id}} hidden/>
+			<input name="form_method" value="post_bacii" hidden/>
+			<div class="form-group">
+				<label class="col-sm-2 control-label">Content</label>
+				<div class="col-sm-10">
+				  <input name="title" class="form-control rounded-0" placeholder="Title"></input>
+				  <p>*Example: Hello This is Title Post</p>
+				</div>
+			  </div>
+			<div class="form-group">
               <label class="col-sm-2 control-label">Subject</label>
               <div class="col-sm-10">
-                <select class="form-control">
-                  {% for x in subject %}
-                    <option>{{x}}</option>
-                  {% endfor %}
+                <select name="subject" class="form-control">
+					<option value="Null">None</option>
+                  	{% for x in list_subject %}
+                    <option value={{x.row}}>{{x.name_en}}</option>
+                  	{% endfor %}
                 </select>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">Content</label>
               <div class="col-sm-10">
-                <textarea
-                  class="form-control rounded-0"
-                  placeholder="Mission En"
-                  rows="5"
-                ></textarea>
+                <textarea name="text_content" class="form-control rounded-0" placeholder="Mission En" rows="5"></textarea>
                 <p>*Example: Today we post content</p>
               </div>
             </div>
             <div class="form-group">
               <label class="col-sm-2 control-label">File input</label>
               <div class="col-sm-10">
-                <input type="file" id="exampleInputFile" multiple />
+                <textarea name="imageurl" class="form-control rounded-0" placeholder="Image" rows="5"></textarea>
+                <p>*Example:</p>
+                <p>ImageUrl1,</p>
+                <p>ImageUrl2,</p>
+                <p>ImageUrl3</p>
               </div>
             </div>
             <div class="form-group">
@@ -116,7 +126,7 @@ current_user.is_authenticated %}
               </tr>
             </thead>
             <tbody>
-              {% for x in _list %}
+              {% for x in list_subject %}
               <tr>
                 <th scope="row" class="text-center">{{x.row}}</th>
                 <th class="text-center">{{x.name_en}}</th>
@@ -124,10 +134,14 @@ current_user.is_authenticated %}
                 <th class="text-center">
                   <button type="button" name="btn" onclick="passData(`{{x.name_en}}`,`{{x.name_kh}}`),`{{x.row}}`" value="Submit" id="submitBtn" data-toggle="modal" data-target="#confirm-submit" class="btn btn-default">
                     <i class="fa fa-edit"></i>
-                  </button>
-                  <button type="button" class="btn btn-danger">
-                    <i class="fa fa-trash"></i>
-                  </button>
+				  </button>
+				  <form action="/admin/bacii/" method="POST">
+					<button type="submit" class="btn btn-danger">
+						<i class="fa fa-trash"></i>
+				  	</button>
+					<input name="form_method" value="delete_subject" hidden/>
+					<input name="subject_id" value={{x.row}} hidden/>
+				  </form>
                 </th>
               </tr>
               {% endfor %}
@@ -186,16 +200,10 @@ current_user.is_authenticated %}
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-default"
-                    data-dismiss="modal"
-                  >
-                    Cancel
-                  </button>
-                  <a href="#" id="submit" class="btn btn-success success"
-                    >Update</a
-                  >
+                	<button type="button" class="btn btn-default" data-dismiss="modal">
+                		Cancel
+                	</button>
+                	<a href="#" id="submit" class="btn btn-success success">Update</a>
                 </div>
               </form>
             </div>

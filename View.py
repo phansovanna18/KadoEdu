@@ -7,6 +7,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.exc import InvalidRequestError
 import random
 import psycopg2
+import datetime
 
 def uniqueID(len):
     letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -46,7 +47,7 @@ class MyModelView(sqla.ModelView):
     details_modal = True
 
 
-class UserView(MyModelView):
+class UserAdminView(MyModelView):
     column_editable_list = ['email', 'first_name', 'last_name']
     column_searchable_list = column_editable_list
     column_exclude_list = ['password']
@@ -59,6 +60,12 @@ class CustomView(BaseView):
     @expose('/')
     def index(self):
         return self.render('admin/custom_index.html')
+
+
+class UserView(MyModelView):
+    column_editable_list = ['profileUrl','displayName']
+    column_searchable_list = ["displayName"]
+    column_filters = column_searchable_list
 
 
 class SchoolView(BaseView):
@@ -113,11 +120,19 @@ class BacII_Post_View(BaseView):
                     self.index()
             if data['form_method'] == "post_bacii":
                 try:
-                    subject_name_en = data['subject_name_en']
-                    subject_name_kh = data['subject_name_kh']
-                    id_code = uniqueID(6)
-                    subject = SubjectBacII(id=id_code, name_en = subject_name_en, name_kh = subject_name_kh)
-                    db.session.add(subject)
+                    owner = db.session.query(User).filter_by(id = "JDEDIXA3").first()
+                    subject = db.session.query(SubjectBacII).filter_by(id = data["subject"]).first()
+                    print(subject)
+                    text_content = data["text_content"]
+                    dateTime = datetime.datetime.now()
+                    title = data["title"]
+                    imageurl = data["imageurl"].split(",\r\n")
+                    # [like, love, haha, wow, sad, angry]
+                    react = [0,0,0,0,0]
+                    id_code = uniqueID(10)
+                    post = BacII_Post(id=id_code, datetime = dateTime, title = title, content = text_content, imageurl = imageurl,react = react,subject = subject,user = owner)
+                    print(post)
+                    db.session.add(post)
                     db.session.commit()
                 except IntegrityError:
                     db.session.rollback()
@@ -128,12 +143,15 @@ class BacII_Post_View(BaseView):
                 except psycopg2.errors.UniqueViolation:
                     db.session.rollback()
                     self.index()
+            if data['form_method'] == "delete_subject":
+                # try:
+                subject = db.session.query(SubjectBacII).filter_by(id = data["subject_id"]).first()
+                db.session.delete(subject)
+                db.session.commit()
+                # except Exception:
+                #     print("Can't Delete")
         list_subject = list()
-        subject = list()
         _object = SubjectBacII.query.all()
-        print(_object)
         for i in _object:
             list_subject.append({'row':i.id,'name_en':i.name_en,'name_kh':i.name_kh})
-        for i in range(1,110):
-            subject.append(i)
-        return self.render('admin/bacii.html', _list = list_subject, subject = subject)
+        return self.render('admin/bacii.html', list_subject = list_subject)
