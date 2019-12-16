@@ -42,9 +42,9 @@ current_user.is_authenticated %}
       </ul>
 
       <div class="tab-content">
-        <div style="text-align: center;" id="home" class="tab-pane fade in active">
+        <div id="home" class="tab-pane fade in active">
           <div class="row">
-            <div >
+            <div class="center-block">
               {%for x in post %}
               <div class="card" style="width: 18rem;">
                 <img
@@ -65,6 +65,7 @@ current_user.is_authenticated %}
           </div>
         </div>
         <div id="post" class="tab-pane fade">
+          <!-- enctype="multipart/form-data" -->
 		  <form class="form-horizontal" action="/admin/bacii/" method="POST">
 			<input name="owner" value={{current_user.id}} hidden/>
 			<input name="form_method" value="post_bacii" hidden/>
@@ -93,6 +94,11 @@ current_user.is_authenticated %}
                 <p>*Example: Today we post content</p>
               </div>
             </div>
+            <!-- <div class="form-group">
+              <label for="exampleInputFile">File input</label>
+              <input name="imageurl" type="file" accept="image/*">
+              <p class="help-block">Example block-level help text here.</p>
+            </div> -->
             <div class="form-group">
               <label class="col-sm-2 control-label">File input</label>
               <div class="col-sm-10">

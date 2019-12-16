@@ -121,6 +121,7 @@ class BacII_Post(db.Model):
     title = db.Column(db.String())
     content = db.Column(db.String())
     imageurl = db.Column(db.ARRAY(db.String()))
+    imageThumb = db.Column(db.ARRAY(db.String()))
     react = db.Column(db.ARRAY(db.Integer()))
     subjectBacII = db.Column(db.String(), db.ForeignKey('SubjectBacII.id'))
     owner = db.Column(db.String(), db.ForeignKey("User.id"))
@@ -152,5 +153,6 @@ class ImageScenary(db.Model):
     __tablename__ = 'ImageScenary'
     id = db.Column(db.String(), primary_key=True)
     imageUrl = db.Column(db.String())
+    imageThumb = db.Column(db.String())
     user_like = db.Column(db.ARRAY(db.String()))
     owner = db.Column(db.String(), db.ForeignKey("User.id"))

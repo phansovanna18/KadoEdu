@@ -14,6 +14,56 @@ def index():
 
 @app.route('/api/getpost')
 def getpost():
+
+    def likeid(id):
+        query = db.session.query(BacII_Post).filter_by(id=id).first()
+        if query != None:
+            react = query.react
+            query.react = [react[0]+1,react[1],react[2],react[3],react[4]]
+            db.session.commit()
+            return jsonify({"state":1})
+        return jsonify({"state":0})
+
+    def getowner(id):
+        query = db.session.query(User).filter_by(id=id).first()
+        if query != None:
+            return query.displayName
+        return None
+
+    def getpostall():
+        query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(5)
+        query = query[::-1]
+        _list = list()
+        if query != None:
+            for x in query:
+                subject = getSubject(x.subjectBacII)
+                subject_en = subject[0]
+                subject_kh = subject[1]
+                owner = getowner(x.owner)
+                # return owner
+                _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner})
+            return jsonify({"result":_list, "state":1})
+        return jsonify({"state":0})
+
+    def getpostid(id):
+        query = db.session.query(BacII_Post).filter_by(id=id).first()
+        if query != None:
+            subject = getSubject(query.subjectBacII)
+            subject_en = subject[0]
+            subject_kh = subject[1]
+            owner = getowner(query.owner)
+            return jsonify({"result":{'id':query.id, 'datetime':query.datetime, 'title':query.title, 'content': query.content, 'imageurl':query.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner},"state":1})
+        return jsonify({"state":0})
+
+    def getSubject(id):
+        subject = db.session.query(SubjectBacII).filter_by(id = id).first()
+        subject_en = None
+        subject_kh = None
+        if subject != None:
+            subject_en = subject.name_en
+            subject_kh = subject.name_kh
+        return (subject_en, subject_kh)
+
     if 'id' in request.args:
         id = request.args['id']
         return getpostid(id)
@@ -21,52 +71,6 @@ def getpost():
         id = request.args['like']
         return likeid(id)
     return getpostall()
-
-
-def likeid(id):
-    query = db.session.query(BacII_Post).filter_by(id=id).first()
-    if query != None:
-        react = query.react
-        query.react = [react[0]+1,react[1],react[2],react[3],react[4]]
-        db.session.commit()
-        return jsonify({"state":1})
-    return jsonify({"state":0})
-
-
-def getpostall():
-    query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(5)
-    query = query[::-1]
-    _list = list()
-    if query != None:
-        for x in query:
-            subject = getSubject(x.subjectBacII)
-            subject_en = subject[0]
-            subject_kh = subject[1]
-            owner = db.session.query(User).filter_by(id = x.owner).first()
-            _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':x.owner})
-        return jsonify({"result":_list, "state":1})
-    return jsonify({"state":0})
-
-
-def getpostid(id):
-    query = db.session.query(BacII_Post).filter_by(id=id).first()
-    if query != None:
-        subject = getSubject(query.subjectBacII)
-        subject_en = subject[0]
-        subject_kh = subject[1]
-        owner = db.session.query(User).filter_by(id = query.owner).first()
-        return jsonify({"result":{'id':query.id, 'datetime':query.datetime, 'title':query.title, 'content': query.content, 'imageurl':query.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':query.owner},"state":1})
-    return jsonify({"state":0})
-
-
-def getSubject(id):
-    subject = db.session.query(SubjectBacII).filter_by(id = id).first()
-    subject_en = None
-    subject_kh = None
-    if subject != None:
-        subject_en = subject.name_en
-        subject_kh = subject.name_kh
-    return (subject_en, subject_kh)
 
 # API End
 
@@ -108,7 +112,6 @@ def build_sample_db():
     """
     Populate a small db with some example entries.
     """
-
     import string
     import random
 

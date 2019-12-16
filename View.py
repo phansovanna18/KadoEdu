@@ -8,6 +8,9 @@ from sqlalchemy.exc import InvalidRequestError
 import random
 import psycopg2
 import datetime
+import requests
+import base64
+import json
 
 def uniqueID(len):
     letter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
@@ -24,6 +27,24 @@ def getSubject(id):
         subject_en = subject.name_en
         subject_kh = subject.name_kh
     return (subject_en, subject_kh)
+
+
+def postImage(image_patch):
+    API_ENDPOINT = "https://api.imgbb.com/1/upload"
+    API_KEY = "4eea31e0d34fbec76e316d7cc9004ee9"
+    # with open(image_patch, "rb") as imageFile:
+    #     str_pic = base64.b64encode(imageFile.read())
+    #     image = str_pic
+    image = image_patch.read()
+    data = {
+        'key':API_KEY,
+        'image':image
+    }
+    r = requests.post(url = API_ENDPOINT, data = data)
+    pastebin_url = r.text
+    pastebin_url = json.loads(pastebin_url)
+    return pastebin_url
+
 
 
 # Create customized model view class
@@ -94,6 +115,7 @@ class BacII_Post_View(BaseView):
     def index(self):
         if request.method == "POST":
             data = request.form.to_dict()
+            # return data
             if data['form_method'] == "save_subject_bacii":
                 try:
                     subject_name_en = data['subject_name_en']
@@ -120,6 +142,14 @@ class BacII_Post_View(BaseView):
                     dateTime = datetime.datetime.now()
                     title = data["title"]
                     imageurl = data["imageurl"].split(",\r\n")
+                    # image = postImage(data["imageurl"])
+                    # image = postImage(request.files["imageurl"])
+                    # return str(image)
+                    # image = image.to_dict()
+                    # if image.get("status") == 200:
+                    #     imageurl = image.get("data").get("image").get("url")
+                    #     imagethumb = image.get("data").get("thumb").get("url")
+                    # return image
                     # [like, love, haha, wow, sad, angry]
                     react = [0,0,0,0,0]
                     id_code = uniqueID(10)
