@@ -42,25 +42,25 @@ current_user.is_authenticated %}
       </ul>
 
       <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
+        <div style="text-align: center;" id="home" class="tab-pane fade in active">
           <div class="row">
-            <div class="center-block">
-              <!-- {%for x in _list %}
+            <div >
+              {%for x in post %}
               <div class="card" style="width: 18rem;">
                 <img
-                  src="{{x.url}}"
+                  src={{x.imageurl[0]}}
                   class="card-img-top"
                   width="300px"
                   height="350px"
                   alt="..."
                 />
                 <div class="card-body">
-                  <h5 class="card-title">{{x.user}}</h5>
+                  <h5 class="card-title">{{x.owner}}</h5>
                   <p class="card-text">{{x.content}}</p>
                   <a href="#" class="btn btn-primary">Like</a>
                 </div>
               </div>
-              {% endfor %} -->
+              {% endfor %}
             </div>
           </div>
         </div>
