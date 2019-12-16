@@ -16,6 +16,15 @@ def uniqueID(len):
         uniqueCode += letter[random.randrange(0,35)] 
     return uniqueCode
 
+def getSubject(id):
+    subject = db.session.query(SubjectBacII).filter_by(id = id).first()
+    subject_en = None
+    subject_kh = None
+    if subject != None:
+        subject_en = subject.name_en
+        subject_kh = subject.name_kh
+    return (subject_en, subject_kh)
+
 
 # Create customized model view class
 class MyModelView(sqla.ModelView):
@@ -80,22 +89,6 @@ class SchoolView(BaseView):
         return self.render('admin/school_index.html', _list = _list)
 
 
-
-class SchoolPriceView(BaseView):
-    @expose('/')
-    def index(self):
-        _list = list()
-        from Module import UserClient
-        school = UserClient.query.all()
-        # for x in school:
-        #     _list.append({'totol_post':x.total_post})
-        for i in range(1,10):
-            _list.append({'row':i,'name_en':'English'+str(i),'name_kh':'Khmer'+str(i)})
-        # new_list = sorted(_list, key=lambda k: k['name_en'])
-        return self.render('admin/school_price.html', _list = _list)
-
-
-
 class BacII_Post_View(BaseView):
     @expose('/', methods=['POST','GET'])
     def index(self):
@@ -150,8 +143,15 @@ class BacII_Post_View(BaseView):
                 db.session.commit()
                 # except Exception:
                 #     print("Can't Delete")
+        query_post = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(5)
+        post = []
+        for x in query_post:
+            subject = getSubject(x.subjectBacII)
+            subject_en = subject[0]
+            subject_kh = subject[1]
+            post.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':x.owner})
         list_subject = list()
         _object = SubjectBacII.query.all()
         for i in _object:
             list_subject.append({'row':i.id,'name_en':i.name_en,'name_kh':i.name_kh})
-        return self.render('admin/bacii.html', list_subject = list_subject)
+        return self.render('admin/bacii.html', post = post ,list_subject = list_subject)
