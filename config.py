@@ -6,7 +6,7 @@ DBUSER = 'postgres'
 DBPASS = '12345678'
 DBHOST = 'localhost'
 DBPORT = '5432'
-DBNAME = 'test8'
+DBNAME = 'test1'
 
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
         user=DBUSER,

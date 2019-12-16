@@ -88,23 +88,14 @@ def build_sample_db():
             password=encrypt_password('adminkado'),
             roles=[user_role, super_user_role]
         )
+
+        user = User(id = "JDEDIXA3", displayName = "Admin",profileUrl = "https://avatars1.githubusercontent.com/u/45761736?s=400&u=0d5c4f046fdc2bc8682cb99d9d4d611eda87010c&v=4", total_post = 0, total_like = 0, joindate = datetime.datetime.now())
+        db.session.add(user)
         db.session.commit()
-    return
-
-
-#data sample
-def build_sample_User_db():
-    import string
-    import random
-    # with app.app_context():
-    test_user = User(id = "JDEDIXA3", displayName = "Admin",profileUrl = "https://avatars1.githubusercontent.com/u/45761736?s=400&u=0d5c4f046fdc2bc8682cb99d9d4d611eda87010c&v=4", total_post = 0, total_like = 0, joindate = datetime.datetime.now())
-    db.session.add(test_user)
-    db.session.commit()
     return
 
 
 if __name__ == '__main__':
     # build_sample_db()
     # Start app
-    # build_sample_User_db()
     app.run(debug=True)
