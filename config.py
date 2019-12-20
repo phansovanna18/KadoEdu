@@ -8,11 +8,7 @@ SECRET_KEY = '123456790'
 # DBHOST = 'localhost'
 # DBPORT = '5432'
 # DBNAME = 'kadotest'
-DBUSER = 'postgres'
-DBPASS = '12345678'
-DBHOST = 'localhost'
-DBPORT = '5432'
-DBNAME = 'test2'
+
 
 SQLALCHEMY_DATABASE_URI = 'postgresql+psycopg2://{user}:{passwd}@{host}:{port}/{db}'.format(
         user=DBUSER,
