@@ -3,11 +3,11 @@ SECRET_KEY = '123456790'
 
 # Create in-memory database
 
-DBUSER = 'kadotest'
-DBPASS = '12345678'
+DBUSER = 'postgres'
+DBPASS = 'rebelliondante'
 DBHOST = 'localhost'
 DBPORT = '5432'
-DBNAME = 'kadotest'
+DBNAME = 'kadoTestDB'
 # DBUSER = 'postgres'
 # DBPASS = '12345678'
 # DBHOST = 'localhost'
