@@ -16,13 +16,8 @@ def index():
 def getpost():
 
 
-    def getpostrefresh():
-        return jsonify({"state":0})
-    
-
-    def getPostBySubject(id):
-        query = db.session.query(BacII_Post).filter_by(subjectBacII=id).order_by(BacII_Post.id.desc()).limit(15)
-        query = query[::-1]
+    def getPostRefresh(num):
+        query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).offset(int(num)*15).limit(15)
         _list = list()
         if query != None:
             for x in query:
@@ -32,6 +27,36 @@ def getpost():
                 owner = getowner(x.owner)
                 # return owner
                 _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner})
+            _list = sorted(_list, key=lambda i: i['datetime'], reverse=True)
+            return jsonify({"result":_list, "state":1})
+        return jsonify({"state":0})
+
+
+    def getPostRefreshBySubject(id, num):
+        query = db.session.query(BacII_Post).filter_by(subjectBacII=id).order_by(BacII_Post.id.desc()).offset(int(num)*15).limit(15)
+        _list = list()
+        if query != None:
+            for x in query:
+                subject = getSubject(x.subjectBacII)
+                subject_en = subject[0]
+                subject_kh = subject[1]
+                owner = getowner(x.owner)
+                _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner})
+            _list = sorted(_list, key=lambda i: i['datetime'], reverse=True)
+            return jsonify({"state":1, "result":_list})
+        return jsonify({"state":0})
+
+    def getPostBySubject(id):
+        query = db.session.query(BacII_Post).filter_by(subjectBacII=id).order_by(BacII_Post.id.desc()).limit(15)
+        _list = list()
+        if query != None:
+            for x in query:
+                subject = getSubject(x.subjectBacII)
+                subject_en = subject[0]
+                subject_kh = subject[1]
+                owner = getowner(x.owner)
+                _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner})
+            _list = sorted(_list, key=lambda i: i['datetime'], reverse=True)
             return jsonify({"state":1, "result":_list})
         return jsonify({"state":0})
 
@@ -52,8 +77,7 @@ def getpost():
         return None
 
     def getpostall():
-        query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc()).limit(15)
-        query = query[::-1]
+        query = db.session.query(BacII_Post).order_by(BacII_Post.id.desc())
         _list = list()
         if query != None:
             for x in query:
@@ -63,10 +87,11 @@ def getpost():
                 owner = getowner(x.owner)
                 # return owner
                 _list.append({'id':x.id, 'datetime':x.datetime,"react":x.react, 'title':x.title, 'content': x.content, 'imageurl':x.imageurl, "subject_en":subject_en, "subject_kh":subject_kh, 'owner':owner})
+            _list = sorted(_list, key=lambda i: i['datetime'], reverse=True)
             return jsonify({"result":_list, "state":1})
         return jsonify({"state":0})
 
-    def getpostid(id):
+    def getPostid(id):
         query = db.session.query(BacII_Post).filter_by(id=id).first()
         if query != None:
             subject = getSubject(query.subjectBacII)
@@ -87,13 +112,20 @@ def getpost():
 
     if 'id' in request.args:
         id = request.args['id']
-        return getpostid(id)
+        return getPostid(id)
+    elif ("subject" in request.args) and ("ref" in request.args):
+        id = request.args["subject"]
+        num = request.args["ref"]
+        return getPostRefreshBySubject(id, num)
     elif 'like' in request.args:
         id = request.args['like']
         return likeid(id)
     elif "subject" in request.args:
         id = request.args["subject"]
         return getPostBySubject(id)
+    elif "ref" in request.args:
+        id = request.args["ref"]
+        return getPostRefresh(id)
     return getpostall()
 
 # API End

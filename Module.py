@@ -7,7 +7,6 @@ from flask_security.utils import encrypt_password
 import flask_admin
 
 
-
 from flask_admin import helpers as admin_helpers
 
 
